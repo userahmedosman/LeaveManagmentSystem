@@ -1,0 +1,14 @@
+﻿@model AboutViewModel
+@{
+    // ViewData["Title"] = "About";
+}
+
+<h2>About me</h2>
+
+<h3>Hajo Osman</h3>
+
+@if(Model?.BirthDate is not null)
+{
+    <h4>BirthDate: @Model.BirthDate</h4>
+}
+
