@@ -1,4 +1,5 @@
 ﻿using LeaveManagmentSystem.Models;
+using LeaveManagmentSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeaveManagmentSystem.Controllers

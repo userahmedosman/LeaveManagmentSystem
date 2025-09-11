@@ -1,4 +1,4 @@
-namespace LeaveManagmentSystem.Models
+namespace LeaveManagmentSystem.ViewModels
 {
     public class ErrorViewModel
     {
