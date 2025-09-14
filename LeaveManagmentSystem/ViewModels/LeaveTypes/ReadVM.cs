@@ -2,7 +2,7 @@
 
 namespace LeaveManagmentSystem.ViewModels.LeaveTypes
 {
-    public sealed class IndexVM
+    public sealed class ReadVM
     {
    
         public int Id { get; set; }

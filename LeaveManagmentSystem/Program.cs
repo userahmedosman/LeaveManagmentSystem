@@ -1,5 +1,6 @@
 using LeaveManagmentSystem.Data;
 using LeaveManagmentSystem.Mappings;
+using LeaveManagmentSystem.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(x => x.AddProfile<AutoMapperProfiles>());
+builder.Services.AddScoped<ILeaveTypesService, LeaveTypesService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

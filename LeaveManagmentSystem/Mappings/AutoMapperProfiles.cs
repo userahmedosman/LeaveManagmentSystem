@@ -9,7 +9,7 @@ namespace LeaveManagmentSystem.Mappings
     public class AutoMapperProfiles:Profile
     {
         public AutoMapperProfiles() {
-            CreateMap<LeaveType, IndexVM>();
+            CreateMap<LeaveType, ReadVM>();
             CreateMap<CreateVM, LeaveType>();
             CreateMap<LeaveType, EditVM>().ReverseMap();
         }
