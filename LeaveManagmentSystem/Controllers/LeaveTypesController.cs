@@ -13,6 +13,7 @@ using LeaveManagmentSystem.Services;
 
 namespace LeaveManagmentSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class LeaveTypesController : Controller
     {
         private const string LeaveTypeNameExists = "Leave Type with the same or similar name already exists.";
@@ -166,7 +167,6 @@ namespace LeaveManagmentSystem.Controllers
                await _leaveTypesService.Remove(id);
             }
 
-   
             return RedirectToAction(nameof(Index));
         }
 
