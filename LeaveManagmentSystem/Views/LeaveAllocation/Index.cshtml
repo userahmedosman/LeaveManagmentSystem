@@ -1,0 +1,52 @@
+﻿@model IEnumerable<EmployeeListVM>
+@{
+	ViewData["Title"] = "All Employees List";
+}
+
+<h1>Employees List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                 
+
+                    <a asp-action="Details" asp-route-userId="@item.Id" class="btn btn-info"
+                       style="position:relative; width:2rem; height:2rem; border-radius:5px;">
+                        <img src="~/Images/info.svg" alt="See Employee Detail"
+                             style="width: 1.2rem; height: 1.2rem; position:absolute; left:0px; right:0px; top:0px; bottom:0px; margin:auto;" />
+                    </a>
+
+                   
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

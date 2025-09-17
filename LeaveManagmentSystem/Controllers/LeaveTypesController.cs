@@ -9,7 +9,8 @@ using LeaveManagmentSystem.Data;
 using LeaveManagmentSystem.Models;
 using LeaveManagmentSystem.ViewModels.LeaveTypes;
 using AutoMapper;
-using LeaveManagmentSystem.Services;
+using LeaveManagmentSystem.Services.LeaveTypeService;
+using LeaveManagmentSystem.ViewModels.LeaveAllocations;
 
 namespace LeaveManagmentSystem.Controllers
 {
@@ -34,14 +35,14 @@ namespace LeaveManagmentSystem.Controllers
         }
 
         // GET: LeaveTypes/Details/5
-        public async Task<ActionResult<ReadVM>> Details(int? id)
+        public async Task<ActionResult<LeaveTypeReadOnlyVM>> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var view = await _leaveTypesService.GetByIdAsync<ReadVM>(id.Value);
+            var view = await _leaveTypesService.GetByIdAsync<LeaveTypeReadOnlyVM>(id.Value);
            
             return View(view);
         }
@@ -57,7 +58,7 @@ namespace LeaveManagmentSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateVM createVM)
+        public async Task<IActionResult> Create(LeaveTypeCreateVM createVM)
         {
             if (createVM == null) {
                 return BadRequest();
@@ -86,7 +87,7 @@ namespace LeaveManagmentSystem.Controllers
                 return NotFound();
             }
 
-            var view = await _leaveTypesService.GetByIdAsync<EditVM>(id.Value);
+            var view = await _leaveTypesService.GetByIdAsync<LeaveTypeEditVM>(id.Value);
             if (view == null)
             {
                 return NotFound();
@@ -99,7 +100,7 @@ namespace LeaveManagmentSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,  EditVM EditViewModel)
+        public async Task<IActionResult> Edit(int id,  LeaveTypeEditVM EditViewModel)
         {
             if (id != EditViewModel.Id)
             {
@@ -147,7 +148,7 @@ namespace LeaveManagmentSystem.Controllers
                 return NotFound();
             }
 
-            var view = await _leaveTypesService.GetByIdAsync<ReadVM>(id.Value);
+            var view = await _leaveTypesService.GetByIdAsync<LeaveTypeReadOnlyVM>(id.Value);
             if (view == null)
             {
                 return NotFound();
@@ -161,7 +162,7 @@ namespace LeaveManagmentSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var leaveType = await _leaveTypesService.GetByIdAsync<ReadVM>(id);
+            var leaveType = await _leaveTypesService.GetByIdAsync<LeaveTypeReadOnlyVM>(id);
             if (leaveType != null)
             {
                await _leaveTypesService.Remove(id);

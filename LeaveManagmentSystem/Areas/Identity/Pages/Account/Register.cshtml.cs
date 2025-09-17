@@ -5,12 +5,14 @@
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 using LeaveManagmentSystem.CustomAttribute;
+using LeaveManagmentSystem.Services.LeaveAllocationService;
 
 namespace LeaveManagmentSystem.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILeaveAllocationService _leaveAllocationService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
@@ -22,6 +24,7 @@ namespace LeaveManagmentSystem.Areas.Identity.Pages.Account
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
+            ILeaveAllocationService leaveAllocationService,
             RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
@@ -30,6 +33,7 @@ namespace LeaveManagmentSystem.Areas.Identity.Pages.Account
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
+            this._leaveAllocationService = leaveAllocationService;
             this._roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
@@ -157,6 +161,7 @@ namespace LeaveManagmentSystem.Areas.Identity.Pages.Account
                         _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+                    await _leaveAllocationService.AllocateLeave(userId);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

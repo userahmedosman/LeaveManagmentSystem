@@ -2,10 +2,12 @@
 
 namespace LeaveManagmentSystem.Models
 {
-    public sealed class LeaveType
+    public sealed class LeaveType:BaseEntity
     {
-        public int Id { get; set; }
+      
         public string Name { get; set; } = string.Empty;
         public int LeaveDurationInDays { get; set; }
+
+        public List<LeaveAllocation>? LeaveAllocations { get; set; }
     }
 }

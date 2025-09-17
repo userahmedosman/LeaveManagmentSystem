@@ -1,12 +1,12 @@
-﻿@model LeaveTypeCreateVM;
+﻿@model PeriodCreateVM
 
 @{
-    ViewData["Title"] = "Create Leave Type";
+    ViewData["Title"] = "Create New Period";
 }
-<h1>Create Leave Type</h1>
+
+<h1>Create New Period</h1>
 
 <hr />
-<br/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -16,13 +16,17 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <br/>
             <div class="form-group">
-                <label asp-for="LeaveDurationInDays" class="control-label"></label>
-                <input asp-for="LeaveDurationInDays" class="form-control" />
-                <span asp-validation-for="LeaveDurationInDays" class="text-danger"></span>
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
-            <br/>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+         
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" />
                 <a asp-action="Index" class="btn btn-primary">Back to List</a>

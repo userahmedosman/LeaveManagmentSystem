@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using LeaveManagmentSystem.Data;
 using LeaveManagmentSystem.Models;
+using LeaveManagmentSystem.ViewModels.LeaveAllocations;
 using LeaveManagmentSystem.ViewModels.LeaveTypes;
 using Microsoft.EntityFrameworkCore;
 
-namespace LeaveManagmentSystem.Services
+namespace LeaveManagmentSystem.Services.LeaveTypeService
 {
     public class LeaveTypesService : ILeaveTypesService
     {
@@ -17,10 +18,10 @@ namespace LeaveManagmentSystem.Services
             this._mapper = mapper;
         }
 
-        public async Task<List<ReadVM>> GetAllAsync()
+        public async Task<List<LeaveTypeReadOnlyVM>> GetAllAsync()
         {
             var leaveTypes = await _dbContext.LeaveTypes.ToListAsync();
-            return _mapper.Map<List<ReadVM>>(leaveTypes);
+            return _mapper.Map<List<LeaveTypeReadOnlyVM>>(leaveTypes);
         }
 
         public async Task<T?> GetByIdAsync<T>(int id) where T : class
@@ -37,7 +38,7 @@ namespace LeaveManagmentSystem.Services
             return _mapper.Map<T>(leaveType);
         }
 
-        public async Task CreateAsync(CreateVM createVm)
+        public async Task CreateAsync(LeaveTypeCreateVM createVm)
         {
             if (createVm == null)
             {
@@ -49,7 +50,7 @@ namespace LeaveManagmentSystem.Services
 
         }
 
-        public async Task EditAsync(EditVM editVM)
+        public async Task EditAsync(LeaveTypeEditVM editVM)
         {
 
             if (editVM is null)
@@ -96,7 +97,7 @@ namespace LeaveManagmentSystem.Services
             return result;
         }
 
-        public async Task<bool> IsLeaveTypeNameRepeatedForEditAsync(int id, EditVM editVm)
+        public async Task<bool> IsLeaveTypeNameRepeatedForEditAsync(int id, LeaveTypeEditVM editVm)
         {
             if (id is <= 0)
             {
@@ -104,6 +105,19 @@ namespace LeaveManagmentSystem.Services
             }
             var result = await _dbContext.LeaveTypes.AnyAsync(lt => lt.Name.ToLower().Equals(editVm.Name.ToLower()) && lt.Id != id);
             return result;
+        }
+
+        public async Task<bool> CheckDayExceedLeaveTypeDate(int leaveTypeId, int Days)
+        {
+            var leaveType = await _dbContext.LeaveTypes.FindAsync(leaveTypeId);
+
+            if(leaveType == null)
+            {
+                throw new Exception($"Leave type does not exist with Id: {leaveTypeId}");
+            }
+
+            return leaveType.LeaveDurationInDays < Days;
+
         }
     }
 

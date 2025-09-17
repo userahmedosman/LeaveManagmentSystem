@@ -1,6 +1,9 @@
 using LeaveManagmentSystem.Data;
 using LeaveManagmentSystem.Mappings;
-using LeaveManagmentSystem.Services;
+using LeaveManagmentSystem.Services.EmailService;
+using LeaveManagmentSystem.Services.LeaveAllocationService;
+using LeaveManagmentSystem.Services.LeaveTypeService;
+using LeaveManagmentSystem.Services.PeriodService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,10 +19,13 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(x => x.AddProfile<AutoMapperProfiles>());
 builder.Services.AddTransient<IEmailSender, EmailSender>(); 
 builder.Services.AddScoped<ILeaveTypesService, LeaveTypesService>();
+builder.Services.AddScoped<ILeaveAllocationService, LeaveAllocationService>();
+builder.Services.AddScoped<IPeriodService, PeriodService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -16,3 +16,5 @@ global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.Extensions.Logging;
 global using LeaveManagmentSystem.Common;
+global using LeaveManagmentSystem.ViewModels.LeaveAllocations;
+global using LeaveManagmentSystem.ViewModels.Periods;

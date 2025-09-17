@@ -1,17 +1,30 @@
 ﻿using AutoMapper;
 using LeaveManagmentSystem.Models;
+using LeaveManagmentSystem.ViewModels.LeaveAllocations;
 using LeaveManagmentSystem.ViewModels.LeaveTypes;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+using LeaveManagmentSystem.ViewModels.Periods;
+
 
 namespace LeaveManagmentSystem.Mappings
 {
     public class AutoMapperProfiles:Profile
     {
         public AutoMapperProfiles() {
-            CreateMap<LeaveType, ReadVM>();
-            CreateMap<CreateVM, LeaveType>();
-            CreateMap<LeaveType, EditVM>().ReverseMap();
+            //LeaveType
+            CreateMap<LeaveType, LeaveTypeReadOnlyVM>();
+            CreateMap<LeaveTypeCreateVM, LeaveType>();
+            CreateMap<LeaveType, LeaveTypeEditVM>().ReverseMap();
+
+            //Period
+            CreateMap<Period, PeriodReadVM>();
+            CreateMap<PeriodCreateVM, Period>();
+            CreateMap<Period, PeriodEditVM>().ReverseMap();
+
+            //LeaveAllocation
+            CreateMap<LeaveAllocation, LeaveAllocationVM>();
+            CreateMap<ApplicationUser, EmployeeListVM>(); 
+            CreateMap<LeaveAllocation, LeaveAllocationEditVM>();
+
         }
     }
 }
