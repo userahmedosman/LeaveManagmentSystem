@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeaveManagmentSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.css">
+
 </head>
 <body>
     <header>
@@ -31,7 +33,7 @@
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Leave Managment
                                 </a>
-                                <ul class="dropdown-menu p-2" aria-labelledby="navbarDropdown">
+                                <ul class="dropdown-menu p-1 m-1" aria-labelledby="navbarDropdown">
                                     <li class="dropdown-item p-1 rounded-3">
                                         <a class="nav-link text-dark" asp-area="" asp-controller="LeaveTypes" asp-action="Index">Leave Types</a>
                                     </li>
@@ -40,6 +42,9 @@
                                     </li>
                                     <li class="dropdown-item p-1 rounded-3">
                                         <a class="nav-link text-dark" asp-area="" asp-controller="LeaveAllocation" asp-action="Index">View Employees</a>
+                                    </li>
+                                    <li class="dropdown-item p-1 rounded-3">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="AdminRequestList">Leave Requests</a>
                                     </li>
                                 </ul>
                             </li>
@@ -69,6 +74,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

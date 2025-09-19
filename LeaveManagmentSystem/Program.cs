@@ -2,6 +2,7 @@ using LeaveManagmentSystem.Data;
 using LeaveManagmentSystem.Mappings;
 using LeaveManagmentSystem.Services.EmailService;
 using LeaveManagmentSystem.Services.LeaveAllocationService;
+using LeaveManagmentSystem.Services.LeaveRequests;
 using LeaveManagmentSystem.Services.LeaveTypeService;
 using LeaveManagmentSystem.Services.PeriodService;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +27,7 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<ILeaveTypesService, LeaveTypesService>();
 builder.Services.AddScoped<ILeaveAllocationService, LeaveAllocationService>();
 builder.Services.AddScoped<IPeriodService, PeriodService>();
+builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

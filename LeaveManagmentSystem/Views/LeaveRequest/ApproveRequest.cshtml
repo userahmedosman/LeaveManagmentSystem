@@ -1,0 +1,18 @@
+﻿@model ReviewLeaveRequestVM
+
+@{
+	ViewData["Title"] = "Review Leave Request";
+}
+<h1>Approval Review</h1>
+<form asp-controller="LeaveRequest" asp-action="ApproveRequest" method="post">
+	<input type="hidden" name="id" asp-for="Id" />
+	<div class="form-floating">
+		<textarea asp-for="ReviewComment" class="form-control" style="width:400px; height:200px; resize:none; overflow:auto;" id="floatingTextarea"></textarea>
+		<label for="floatingTextarea">Approval Comment (Optional)</label>
+	</div>
+
+	<div class="d-flex gap-4 align-content-between mt-4">
+		<button type="submit" class="btn btn-success">Approve</button>
+		<a asp-controller="LeaveRequest" asp-action="AdminRequestList" class="btn btn-danger">Cancel</a>
+	</div>
+</form>

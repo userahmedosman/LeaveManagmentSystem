@@ -1,0 +1,77 @@
+﻿@model IEnumerable<LeaveRequestReadOnlyVM>
+@using LeaveManagmentSystem.Services.LeaveRequests;
+
+@{
+    ViewData["Title"] = "Employee Leave Request History";
+}
+
+<h1> Employee Leave Request History</h1>
+<hr />
+<form asp-action="Details" asp-controller="LeaveAllocation">
+    <input type="hidden" name="userId" asp-for="@Model.First().EmployeeId" />
+    <input type="submit" value="Employee Allocation" class="btn btn-primary mb-4" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfDays)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveRequestStatusEnum)
+            </th>
+            <th>
+                Action
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string statusColor = item.LeaveRequestStatusEnum switch
+            {
+                LeaveRequestStatusEnum.Approved => "bg-success",
+                LeaveRequestStatusEnum.Declined => "bg-danger",
+                LeaveRequestStatusEnum.Cancelled => "bg-black",
+                _ => "bg-warning"
+            };
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfDays)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveType)
+                </td>
+                <td>
+                    <span class="badge rounded-pill text-white @statusColor">@item.LeaveRequestStatusEnum.ToString()</span>
+                </td>
+                <td>
+                    <div class="d-flex gap-1 m-1 align-items-center">
+                        <a asp-action="Details" title="See Leave Request Detail" asp-route-id="@item.Id" class="btn btn-info"
+                           style="position:relative; width:2rem; height:2rem; border-radius:5px;">
+                            <img src="~/Images/info.svg" alt="See Leave Request Detail"
+                                 style="width: 1.2rem; height: 1.2rem; position:absolute; left:0px; right:0px; top:0px; bottom:0px; margin:auto;" />
+                        </a>
+                    </div>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

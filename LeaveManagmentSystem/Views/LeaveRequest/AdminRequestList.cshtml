@@ -1,0 +1,179 @@
+﻿@model EmployeeLeaveRequestListVM
+@using LeaveManagmentSystem.Services.LeaveRequests;
+
+@{
+    ViewData["Title"] = "Employees Leave Requests";
+}
+
+<h1>Employees Leave Requests Admin Board</h1>
+<hr />
+<div class="d-flex gap-3 align-items-center w-100 justify-content-between p-1 m-1">
+    <div class="card bg-light mb-3 rounded-3" style="max-width: 18rem;">
+        <div class="card-header fw-bold text-center">@Html.DisplayNameFor(model => model.TotalRequests)</div>
+        <div class="card-body">
+            <h1 class="card-title text-center">@Html.DisplayFor(model => model.TotalRequests)</h1>
+        </div>
+    </div>
+    <div class="card bg-success mb-3 rounded-3" style="max-width: 18rem;">
+        <div class="card-header fw-bold text-center">@Html.DisplayNameFor(model => model.ApprovedRequests)</div>
+        <div class="card-body">
+            <h1 class="card-title text-center">@Html.DisplayFor(model => model.ApprovedRequests)</h1>
+        </div>
+    </div>
+    <div class="card bg-danger mb-3 rounded-3" style="max-width: 18rem;">
+        <div class="card-header fw-bold text-center">@Html.DisplayNameFor(model => model.DeclinedRequests)</div>
+        <div class="card-body">
+            <h1 class="card-title text-center">@Html.DisplayFor(model => model.DeclinedRequests)</h1>
+        </div>
+    </div>
+    <div class="card bg-dark mb-3 rounded-3" style="max-width: 18rem;">
+        <div class="card-header fw-bold text-center text-light">@Html.DisplayNameFor(model => model.CancelledRequests)</div>
+        <div class="card-body">
+            <h1 class="card-title text-center text-light">@Html.DisplayFor(model => model.CancelledRequests)</h1>
+        </div>
+    </div>
+    <div class="card bg-warning mb-3 rounded-3" style="max-width: 18rem;">
+        <div class="card-header fw-bold text-center">@Html.DisplayNameFor(model => model.PendingRequests)</div>
+        <div class="card-body">
+            <h1 class="card-title text-center">@Html.DisplayFor(model => model.PendingRequests)</h1>
+        </div>
+    </div>
+</div>
+<a asp-action="Index" asp-controller="LeaveAllocation" title="See Leave Request Detail"  class="btn btn-primary mt-4 mb-4">Go to Employee List</a>
+
+@if(Model.LeaveRequests.Count == 0)
+{
+<div class="alert alert-info">There are no any leave request yet</div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                   <span>Start Date</span>
+                </th>
+                <th>
+                    <span>End Date</span>
+                </th>
+                <th>
+                    <span>Requested Days</span>
+                </th>
+                <th>
+                    <span>Leave Reason</span>
+                </th>
+                <th>
+                    <span>Request Status</span>
+                </th>
+                <th>
+                    Action
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model.LeaveRequests)
+        {
+            string statusColor = item.LeaveRequestStatusEnum switch
+            {
+                LeaveRequestStatusEnum.Approved => "bg-success",
+                LeaveRequestStatusEnum.Declined => "bg-danger",
+                LeaveRequestStatusEnum.Cancelled => "bg-black",
+                _ => "bg-warning"
+            };
+       
+            <tbody>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumberOfDays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LeaveType)
+                    </td>
+                    <td>
+                        <span class="badge rounded-pill text-white @statusColor">@item.LeaveRequestStatusEnum.ToString()</span>
+                    </td>
+                    <td>
+                        <div class=" d-flex gap-1 m-1 align-items-center">
+                            <a asp-action="AdminRequestDetails" title="See Leave Request Detail" asp-route-id="@item.Id" class="btn btn-info"
+                               style="position:relative; width:2rem; height:2rem; border-radius:5px;">
+                                <img src="~/Images/info.svg" alt="See Leave Request Detail"
+                                     style="width: 1.2rem; height: 1.2rem; position:absolute; left:0px; right:0px; top:0px; bottom:0px; margin:auto;" />
+                            </a>
+                            @if (item.LeaveRequestStatusEnum == LeaveRequestStatusEnum.Pending)
+                            {
+                  
+                                <button data-id="@item.Id" title="Approve Leave Request" type="submit" class="btn btn-success approveBtn" style="position:relative; width:2rem; height:2rem; border-radius:5px;">
+                                        <img src="~/Images/approve.svg" alt=""
+                                             style="width: 1.2rem; height: 1.2rem; position:absolute; left:0px; right:0px; top:0px; bottom:0px; margin:auto;" />
+                                    </button>
+                              
+                                <button data-id="@item.Id" title="Decline Leave Request" type="submit" class="btn btn-danger declineBtn" style="position:relative; width:2rem; height:2rem; border-radius:5px;">
+                                        <img src="~/Images/decline.svg" alt=""
+                                             style="width: 1.2rem; height: 1.2rem; position:absolute; left:0px; right:0px; top:0px; bottom:0px; margin:auto;" />
+                                </button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+
+}
+<form asp-controller="LeaveRequest" id="approveForm" asp-action="ApproveRequest" method="get">
+    <input type="hidden" name="id" id="approveLeaveRequestId" />
+</form>
+<form asp-controller="LeaveRequest" id="declineForm" asp-action="DeclineRequest" method="get">
+    <input type="hidden" name="id" id="declineLeaveRequestId" />
+</form>
+@section Scripts {
+    <script>
+        $(function () {
+            $('.approveBtn').click(function (e) {
+          Swal.fire({
+          title: "Are you sure ?",
+          text: "Once approved, you will not be able to change this leave request status",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Approve",
+          cancelButtonText: "Cancel",
+          dangerMode: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            var btn = $(this);
+            var id = btn.data("id");
+            $('#approveLeaveRequestId').val(id);
+            $('#approveForm').submit();
+          } 
+        });
+		});});
+
+         $(function () {
+            $('.declineBtn').click(function (e) {
+          Swal.fire({
+          title: "Are you sure ? ",
+          text: "Once declined, you will not be able to change this leave request status",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, Decline it!",
+          cancelButtonText: "No, keep it",
+          dangerMode: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            var btn = $(this);
+            var id = btn.data("id");
+            $('#declineLeaveRequestId').val(id);
+            $('#declineForm').submit();
+          } 
+        });
+		});})
+         
+    </script>
+    }

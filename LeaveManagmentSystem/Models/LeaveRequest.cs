@@ -1,0 +1,31 @@
+﻿namespace LeaveManagmentSystem.Models
+{
+    public sealed class LeaveRequest:BaseEntity
+    {
+        public DateOnly StartDate {  get; set; }
+
+        public DateOnly EndDate { get; set; }
+
+        public LeaveType? LeaveType { get; set; }
+
+        public int LeaveTypeId { get; set; }
+
+        public LeaveRequestStatus? LeaveRequestStatus { get; set; }
+
+        public int LeaveRequestStatusId { get; set; }
+
+        public ApplicationUser? Employee { get; set; }
+
+        public string EmployeeId { get; set; } = default!;
+
+        public ApplicationUser? Reviewer { get; set; }
+
+        public string? ReviewerId { get; set; }
+
+        public string? RequestComment { get; set; }
+
+        public string? ReviewComment { get; set; }
+
+        public bool? IsEmergency { get; set; } = false;
+    }
+}

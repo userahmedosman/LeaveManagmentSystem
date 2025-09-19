@@ -1,0 +1,143 @@
+﻿@model LeaveRequestDetailVM
+@using LeaveManagmentSystem.Services.LeaveRequests;
+@inject UserManager<ApplicationUser> userManager;
+@{
+    ViewData["Title"] = "Leave Request Detail";
+
+    string returnRoute = User.IsInRole(Roles.Admin) && Model.Employee.Id != userManager.GetUserId(User) ? "EmployeeLeaveRequests" : "MyLeaveRequest";
+}
+
+<h1>Leave Request Detail</h1>
+
+<hr />
+<div>
+
+    <dl class="row flex-md-column">
+        <div class="d-flex gap-4 align-items-baseline">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+        </div>
+        <div class="d-flex gap-4 align-items-baseline">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.EndDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EndDate)
+            </dd>
+        </div>
+        <div class="d-flex gap-4 align-items-baseline">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.NumberOfDays)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.NumberOfDays)
+            </dd>
+        </div>
+        <div class="d-flex gap-4 align-items-baseline">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LeaveType)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.LeaveType)
+            </dd>
+        </div>
+
+        <div class="d-flex gap-4 align-items-baseline">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.RequestComment)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.RequestComment)
+            </dd>
+        </div>
+
+        <div class="d-flex gap-4 align-items-baseline">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.IsEmergency)
+            </dt>
+            <dd class="col-sm-2">
+                @if(Model.IsEmergency is not null)
+                {
+                    @(Model.IsEmergency.Value ? "Yes" : "No")
+                }
+                else
+                {
+                    @Html.Display("Not specified")
+                }
+            </dd>
+        </div>
+
+        @if (Model.LeaveRequestStatusEnum == LeaveRequestStatusEnum.Approved)
+        {
+            <div class="d-flex gap-4 align-items-baseline">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ReviewComment)
+                </dt>
+                <dd class="col-sm-2">
+                    @if(Model.ReviewComment is not null)
+                    {
+                        @Html.DisplayFor(model => model.ReviewComment)
+                    }
+                    else
+                    {
+                        <span>Not Specified</span>
+                    }
+                </dd>
+            </div>
+
+            <div class="d-flex gap-4 align-items-baseline">
+                <dt class="col-sm-2">
+                    <span>Approved By</span>
+                </dt>
+                <dd class="col-sm-2">
+                    @if(Model.Reviewer is not null)
+                    {
+                        <span>@Model.Reviewer.FirstName @Model.Reviewer.LastName</span>
+                    }
+                </dd>
+            </div>
+        }
+
+        @if (Model.LeaveRequestStatusEnum == LeaveRequestStatusEnum.Declined)
+        {
+            <div class="d-flex gap-4 align-items-baseline">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ReviewComment)
+                </dt>
+                <dd class="col-sm-2">
+                    @if (Model.ReviewComment is not null)
+                    {
+                        @Html.DisplayFor(model => model.ReviewComment)
+                    }
+                    else
+                    {
+                        <span>Not Specified</span>
+                    }
+                </dd>
+            </div>
+
+            <div class="d-flex gap-4 align-items-baseline">
+                <dt class="col-sm-2">
+                    <span>Declined By</span>
+                </dt>
+                <dd class="col-sm-2">
+                    @if (Model.Reviewer is not null)
+                    {
+                        <span>@Model.Reviewer.FirstName @Model.Reviewer.LastName</span>
+                    }
+                </dd>
+            </div>
+        }
+
+
+    </dl>
+</div>
+<br />
+<form asp-action="@returnRoute" asp-controller="LeaveRequest">
+    <input type="hidden" asp-for="@Model.Employee.Id" name="employeeId" />
+    <input class="btn btn-primary" type="submit" value="Back to List" />
+</form>

@@ -1,0 +1,109 @@
+﻿@model IEnumerable<LeaveRequestReadOnlyVM>
+@using LeaveManagmentSystem.Services.LeaveRequests;
+
+@{
+    ViewData["Title"] = "Leave Request History";
+}
+
+<h1>Leave Request History</h1>
+<hr />
+<a asp-action="Details" asp-controller="LeaveAllocation" title="See Leave Request Detail" class="btn btn-primary">Allocation List</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfDays)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveRequestStatusEnum)
+            </th>
+            <th>
+                Action
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string statusColor = item.LeaveRequestStatusEnum switch
+            {
+                LeaveRequestStatusEnum.Approved => "bg-success",
+                LeaveRequestStatusEnum.Declined => "bg-danger",
+                LeaveRequestStatusEnum.Cancelled => "bg-black",
+                _ => "bg-warning"
+            };
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfDays)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveType)
+                </td>
+                <td>
+                    <span class="badge rounded-pill text-white @statusColor">@item.LeaveRequestStatusEnum.ToString()</span>
+                </td>
+                <td>
+                   <div class="d-flex gap-1 m-1 align-items-center">
+                        <a asp-action="Details" title="See Leave Request Detail" asp-route-id="@item.Id" class="btn btn-info"
+                           style="position:relative; width:2rem; height:2rem; border-radius:5px;">
+                            <img src="~/Images/info.svg" alt="See Leave Request Detail"
+                                 style="width: 1.2rem; height: 1.2rem; position:absolute; left:0px; right:0px; top:0px; bottom:0px; margin:auto;" />
+                        </a>
+                        @if (item.LeaveRequestStatusEnum == LeaveRequestStatusEnum.Pending)
+                        {
+                            <button data-id="@item.Id" title="Cancel Leave Request" type="submit" class="btn btn-danger cancelBtn" style="position:relative; width:2rem; height:2rem; border-radius:5px;">
+                                <img src="~/Images/cancel.svg" alt=""
+                                     style="width: 1.2rem; height: 1.2rem; position:absolute; left:0px; right:0px; top:0px; bottom:0px; margin:auto;" />
+                            </button>
+                            
+                        }
+                   </div>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<form asp-controller="LeaveRequest" id="cancelForm" asp-action="CancelRequest" method="post">
+    <input type="hidden"  name="id" id="leaveRequestId" />
+</form>
+@section Scripts {
+    <script>
+        $(function () {
+            $('.cancelBtn').click(function (e) {
+          Swal.fire({
+          title: "Are you sure?",
+          text: "Once cancelled, you will not be able to recover this leave request!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, cancel it!",
+          cancelButtonText: "No, keep it",
+          dangerMode: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            var btn = $(this);
+            var id = btn.data("id");
+            $('#leaveRequestId').val(id);
+            $('#cancelForm').submit();
+          } 
+        });
+				});})
+         
+    </script>
+}

@@ -1,15 +1,31 @@
 ﻿@model EmployeeAllocationVM
 @inject IHttpContextAccessor httpContext
+@inject UserManager<ApplicationUser> userManager
 @{
 	ViewData["Titile"] = "Leave Allocations";
 	bool isAdmin = httpContext.HttpContext.User.IsInRole(Roles.Admin);
+	bool isEmployee = httpContext.HttpContext.User.IsInRole(Roles.Employee);
 	string message = isAdmin ? "There is no any allocation" : "There is no any allocation </br> Please contact the admin.";
 }
 
 <h2>Leave Allocations for @Model.FirstName @Model.LastName</h2>
-@if(isAdmin){
-	<a class="btn btn-primary" asp-action="Index">Back To List</a>
+
+@if (isAdmin && userManager.GetUserId(httpContext.HttpContext.User) != Model.Id)
+{
+	<form asp-action="EmployeeLeaveRequests" asp-controller="LeaveRequest">
+		<input type="hidden" name="employeeId" asp-for="@Model.Id" />
+		<input type="submit" value="View Employee Request History" class="btn btn-primary mb-4" />
+	</form>
+	
 }
+else if (!isAdmin || (isAdmin && userManager.GetUserId(httpContext.HttpContext.User) == Model.Id))
+{
+	<a class="btn btn-primary" asp-controller="LeaveRequest" asp-action="MyLeaveRequest">View Request History</a>
+}
+@* @if (isEmployee)
+{
+	
+} *@
 <div>
 	<hr />
 	<dl class="row">
@@ -56,7 +72,6 @@
 	</form>
 }
 
-
 @if (Model.LeaveAllocations.Any())
 {
 	<div class="card" style="width:100%;">
@@ -85,14 +100,20 @@
 							<span class="badge rounded-pill text-white bg-primary">@(allocation.LeaveType.LeaveDurationInDays < 10 ? "0" + allocation.LeaveType.LeaveDurationInDays : allocation.LeaveType.LeaveDurationInDays)</span>
 						</div>
 						<div class="col">
-							<span class="badge rounded-pill text-white @(allocation.Days < 5 ? "bg-danger" : "bg-warning")">@(allocation.Days < 10 ? "0" + allocation.Days : allocation.Days)</span>
+							<span class="badge rounded-pill text-white @(allocation.Days < 5 ? allocation.Days == 0 ? "bg-dark" : "bg-danger" : "bg-warning")">@(allocation.Days < 10 ? "0" + allocation.Days : allocation.Days)</span>
 						</div>
-						<div class="col">
+						<div class="col d-flex gap-1 m-1 align-items-center">
 							@if (isAdmin)
 							{
 							<a asp-action="EditAllocation" asp-route-Id="@allocation.Id" class="btn btn-warning">Edit Allocation</a>
 							}
-							<a asp-controller="LeaveRequest" asp-action="Create" class="btn btn-success">Leave Request</a>
+							<form asp-controller="LeaveRequest" asp-action="Create" method="get">
+								<input type="hidden" name="requesterId" value="@Model.Id" />
+								<input type="hidden" name="LeaveTypeId" asp-for="@allocation.LeaveType.Id" />
+								<input type="submit" class="btn btn-success" value="Leave Request" />
+							</form>
+
+						
 						</div>
 					</div>
 				</li>

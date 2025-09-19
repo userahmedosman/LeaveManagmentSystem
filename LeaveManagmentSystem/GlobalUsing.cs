@@ -18,3 +18,4 @@ global using Microsoft.Extensions.Logging;
 global using LeaveManagmentSystem.Common;
 global using LeaveManagmentSystem.ViewModels.LeaveAllocations;
 global using LeaveManagmentSystem.ViewModels.Periods;
+global using LeaveManagmentSystem.ViewModels.LeaveReqests;
